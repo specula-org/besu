@@ -176,6 +176,9 @@ public class QbftBlockHeightManager implements BaseQbftBlockHeightManager {
 
     logValidatorChanges(qbftRound);
 
+    // TLA+ trace: BlockTimerExpiry
+    TlaTracer.emitFromRound("BlockTimerExpiry", qbftRound, finalState.getLocalAddress());
+
     if (roundIdentifier.equals(qbftRound.getRoundIdentifier())) {
       buildBlockAndMaybePropose(roundIdentifier, qbftRound);
     } else {
@@ -277,6 +280,9 @@ public class QbftBlockHeightManager implements BaseQbftBlockHeightManager {
           expire.getView());
       return;
     }
+
+    // TLA+ trace: RoundExpiry
+    TlaTracer.emitFromRound("RoundExpiry", qbftRound, finalState.getLocalAddress());
 
     doRoundChange(qbftRound.getRoundIdentifier().getRoundNumber() + 1);
   }

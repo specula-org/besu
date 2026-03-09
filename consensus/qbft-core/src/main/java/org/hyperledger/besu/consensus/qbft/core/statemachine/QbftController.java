@@ -255,6 +255,11 @@ public class QbftController implements QbftEventHandler {
       return;
     }
     startNewHeightManager(newBlockHeader);
+    // TLA+ trace: NewChainHead (after starting new height manager)
+    TlaTracer.setBlockchainHeight(newBlockHeader.getNumber());
+    TlaTracer.emitNodeEvent("NewChainHead", finalState.getLocalAddress(),
+        newBlockHeader.getNumber() + 1, -1, "Proposing",
+        false, false);
   }
 
   @Override

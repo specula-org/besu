@@ -2,3 +2,6 @@
 	path = ethereum/referencetests/src/reference-test/external-resources
 	url = https://github.com/ethereum/tests.git
 	ignore = all
+[submodule "substrate/artifact/substrate"]
+	path = substrate/artifact/substrate
+	url = https://github.com/specula-org/substrate.git

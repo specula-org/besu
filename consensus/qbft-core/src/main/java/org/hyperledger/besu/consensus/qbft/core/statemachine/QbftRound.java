@@ -228,6 +228,9 @@ public class QbftRound {
         msg.getAuthor());
     final QbftBlock block = msg.getSignedPayload().getPayload().getProposedBlock();
     if (updateStateWithProposedBlock(msg)) {
+      // TLA+ trace: HandleProposal (after state update)
+      TlaTracer.emitMsgFromRound("HandleProposal", this, localAddress,
+          msg.getAuthor(), "ProposalMsg");
       sendPrepare(block);
     }
   }
@@ -326,6 +329,9 @@ public class QbftRound {
   private void peerIsPrepared(final Prepare msg) {
     final boolean wasPrepared = roundState.isPrepared();
     roundState.addPrepareMessage(msg);
+    // TLA+ trace: HandlePrepare (after addPrepareMessage)
+    TlaTracer.emitMsgFromRound("HandlePrepare", this, localAddress,
+        msg.getAuthor(), "PrepareMsg");
     if (wasPrepared != roundState.isPrepared()) {
       LOG.debug("Sending commit message. round={}", roundState.getRoundIdentifier());
       final QbftBlock block = roundState.getProposedBlock().get();
@@ -342,6 +348,9 @@ public class QbftRound {
   private void peerIsCommitted(final Commit msg) {
     final boolean wasCommitted = roundState.isCommitted();
     roundState.addCommitMessage(msg);
+    // TLA+ trace: HandleCommit (after addCommitMessage)
+    TlaTracer.emitMsgFromRound("HandleCommit", this, localAddress,
+        msg.getAuthor(), "CommitMsg");
     if (wasCommitted != roundState.isCommitted()) {
       importBlockToChain();
     }
